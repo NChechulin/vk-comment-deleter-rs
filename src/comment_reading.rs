@@ -24,7 +24,7 @@ fn read_file_contents(path: &String) -> String {
 }
 
 
-pub fn get_comments_from_file(path: &String) -> Vec<Comment> {
+fn get_comments_from_file(path: &String) -> Vec<Comment> {
     let re = Regex::new(r"https://vk.com/wall(-?\d+)_\d+\?reply=(\d+)").unwrap();
     let mut result = Vec::new();
 
