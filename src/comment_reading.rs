@@ -1,9 +1,11 @@
 use encoding_rs::WINDOWS_1251;
 use encoding_rs_io::DecodeReaderBytesBuilder;
 use regex::Regex;
+use std::collections::HashSet;
 use std::fs::{read_dir, File};
 use std::io::{BufReader, Read};
 
+#[derive(PartialEq, Eq, Hash)]
 pub struct Comment {
     pub owner_id: String,
     pub comment_id: String,
@@ -56,12 +58,13 @@ fn get_comments_from_file(path: &String) -> Vec<Comment> {
 }
 
 pub fn get_all_comments(folder_path: &String) -> Vec<Comment> {
-    let mut result = vec![];
+    let mut result: HashSet<Comment> = HashSet::new();
 
     for file in get_list_of_files(folder_path) {
-        let mut comments_from_file = get_comments_from_file(&file);
-        result.append(&mut comments_from_file);
+        for comment in get_comments_from_file(&file) {
+            result.insert(comment);
+        }
     }
 
-    result
+    result.into_iter().collect()
 }
