@@ -1,6 +1,7 @@
 extern crate regex;
 use dialoguer::Input;
 use regex::Regex;
+use std::path::Path;
 
 /// Проверяет, может ли введенная строка быть токеном (но не дает 100%-й гарантии)
 pub fn token_first_validation(token: &String) -> Result<(), &'static str> {
@@ -34,4 +35,21 @@ pub fn read_agreement() -> bool {
         .unwrap();
 
     agreed.trim().to_ascii_lowercase() == "y"
+}
+
+/// Читает путь к папке с `.html` файлами комментариев
+pub fn read_comments_dir() -> String {
+    Input::new()
+        .with_prompt("Введите путь до папки comments (включая ее саму)")
+        .validate_with(|path_str: &String| -> Result<(), &str> {
+            let path = Path::new(path_str);
+            if path.exists() && path.is_dir() && path.file_name().unwrap_or_default() == "comments"
+            {
+                return Ok(());
+            }
+
+            Err("Указанный путь не существует")
+        })
+        .interact()
+        .unwrap()
 }
