@@ -26,6 +26,17 @@ fn read_token() -> String {
         .unwrap()
 }
 
+/// Читает Y/N для согласия на удаление комментариев
+fn read_agreement() -> bool {
+    let agreed: String = Input::new()
+        .with_prompt("Начать удаление? [Y/N]")
+        .interact()
+        .unwrap();
+
+    agreed.trim().to_ascii_lowercase() == "y"
+}
+
 fn main() {
-    read_token();
+    // read_token();
+    println!("{}", read_agreement());
 }
