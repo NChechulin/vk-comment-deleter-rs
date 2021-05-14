@@ -22,3 +22,20 @@ fn read_file_contents(path: &String) -> String {
 
     result
 }
+
+
+pub fn get_comments_from_file(path: &String) -> Vec<Comment> {
+    let re = Regex::new(r"https://vk.com/wall(-?\d+)_\d+\?reply=(\d+)").unwrap();
+    let mut result = Vec::new();
+
+    let html = read_file_contents(path);
+
+    for capture in re.captures_iter(&html) {
+        result.push(Comment {
+            owner_id: capture[1].to_string(),
+            comment_id: capture[2].to_string(),
+        });
+    }
+
+    result
+}
