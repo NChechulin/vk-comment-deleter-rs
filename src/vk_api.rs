@@ -1,4 +1,5 @@
 use crate::comment_reading::Comment;
+use reqwest::Client;
 use std::collections::HashMap;
 
 impl Comment {
@@ -11,5 +12,26 @@ impl Comment {
         result.insert("v", String::from("5.120"));
 
         result
+    }
+
+    pub async fn send_delete_comment_request(
+        &self,
+        token: &String,
+        client: &mut Client,
+    ) -> Result<(), String> {
+        let params = self.serialize(token);
+        let res = client
+            .get("https://api.vk.com/method/wall.deleteComment")
+            .query(&params)
+            .send()
+            .await;
+
+        match res {
+            Ok(resp) => match resp.status().is_success() {
+                true => Ok(()),
+                false => Err(resp.status().to_string()),
+            },
+            Err(e) => Err(e.to_string()),
+        }
     }
 }
