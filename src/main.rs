@@ -1,6 +1,7 @@
 pub mod cli;
 pub mod comment_reading;
 pub mod vk_api;
+use pbr::ProgressBar;
 use std::thread;
 use std::time::Duration;
 use tokio;
@@ -34,6 +35,7 @@ async fn main() {
     );
 
     let mut client = reqwest::Client::new();
+    let mut progress_bar = ProgressBar::new(all_comments.len() as u64);
 
     for (number, comment) in all_comments.iter().enumerate() {
         match comment
@@ -43,6 +45,7 @@ async fn main() {
             Ok(_) => {}
             Err(e) => println!("Ошибка в комментарии #{} {}", number, e),
         }
+        progress_bar.inc();
         thread::sleep(SLEEP_DURATION);
     }
 }
