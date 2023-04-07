@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dialoguer = "0.10.3"
+dialoguer = "0.10.4"
 regex = "1.7.1"
 encoding_rs = "0.8.32"
 encoding_rs_io = "0.1.7"
